@@ -13,7 +13,10 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository repository;
 
-
+    @GetMapping(path = "/api/usuarios")
+    public Iterable<UsuarioModel> findAll(){
+        return repository.findAll();
+    }
 
 
     @GetMapping(path = "/api/usuario/{codigo}")
@@ -30,5 +33,15 @@ public class UsuarioController {
 
         return repository.save(usuario);
     }
+
+    @DeleteMapping(path ={"/api/usuario/{codigo}"})
+    public ResponseEntity <?> delete(@PathVariable Integer codigo) {
+        return repository.findById(codigo)
+                .map(record -> {
+                    repository.deleteById(codigo);
+                    return ResponseEntity.ok().build();
+                }).orElse(ResponseEntity.notFound().build());
+    }
+
 
 }
